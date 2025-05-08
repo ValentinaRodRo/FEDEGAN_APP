@@ -8,7 +8,63 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
+<header class="hero">
+  <img src="fedegan-logo.png" alt="FEDEGAN Logo" class="logo">
+  <h1>FEDEGAN Monitoreo Sanitario y Comercio Exterior</h1>
+</header>
 
+<nav class="tabs">
+  <button id="tab-import-export" class="active">Import/Export</button>
+  <button id="tab-outbreaks">Brotes</button>
+</nav>
+
+<main>
+  <!-- Import/Export Section -->
+  <section id="import-export" class="dashboard active">
+    <div class="container">
+      <div id="map-import-export" class="map"></div>
+      <div class="panel">
+        <table class="log-table">
+          <thead>
+          <tr>
+            <th>Fecha</th><th>Origen</th><th>Destino</th>
+            <th>Cant.</th><th>Salida</th><th>Llegada</th><th>Operador</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr><td>2025-05-01 08:30</td><td>Bogotá</td><td>Cali</td><td>50</td><td>2025-05-01</td><td>2025-05-02</td><td>XYZ</td></tr>
+          <tr><td>2025-05-02 14:15</td><td>Medellín</td><td>Barranquilla</td><td>30</td><td>2025-05-02</td><td>2025-05-03</td><td>AgroLog</td></tr>
+          <tr><td>2025-05-03 10:00</td><td>Miami (USA)</td><td>Bogotá</td><td>100</td><td>2025-05-03</td><td>2025-05-05</td><td>Global</td></tr>
+          <tr><td>2025-05-04 16:45</td><td>Bogotá</td><td>Hamburgo</td><td>80</td><td>2025-05-04</td><td>2025-05-10</td><td>InterAgro</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Outbreaks Section -->
+  <section id="outbreaks" class="dashboard">
+    <div class="container">
+      <div id="map-outbreaks" class="map"></div>
+      <div class="panel">
+        <div class="card">
+          <h3>Fiebre Aftosa – Santander</h3>
+          <p><strong>Casos:</strong> 42</p>
+          <p><strong>Último:</strong> 2025-05-06</p>
+          <p><strong>Estado:</strong> Contención activa</p>
+        </div>
+        <div class="card">
+          <h3>Brucelosis – Valle del Cauca</h3>
+          <p><strong>Casos:</strong> 18</p>
+          <p><strong>Último:</strong> 2025-05-07</p>
+          <p><strong>Acción:</strong> Vacunación en curso</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
