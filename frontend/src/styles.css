@@ -1,0 +1,17 @@
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#f4f6f8;color:#333;height:100vh;display:flex;flex-direction:column}
+header.hero{background:#00502b;color:#fff;padding:1rem;text-align:center}
+header.hero .logo{height:50px;vertical-align:middle;margin-right:1rem}
+.tabs{display:flex;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
+.tabs button{flex:1;padding:1rem;border:none;background:none;cursor:pointer}
+.tabs button.active{border-bottom:3px solid #00502b;color:#00502b}
+main{flex:1;overflow:hidden}
+.dashboard{display:none;height:100%}
+.dashboard.active{display:block}
+.container{display:flex;height:100%}
+.map{flex:2}
+.panel{flex:1;overflow-y:auto;background:#fff;padding:1rem}
+.log-table{width:100%;border-collapse:collapse}
+.log-table th,.log-table td{padding:.5rem;border-bottom:1px solid #e0e0e0}
+.log-table th{background:#e8f5e9}
+.card{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:1rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
