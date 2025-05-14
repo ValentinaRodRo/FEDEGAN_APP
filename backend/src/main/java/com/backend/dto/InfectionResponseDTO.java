@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class InfectionResponseDTO {
     private Long id;
+    private String city;
     private Double lat;
     private Double lng;
     private Double radius;

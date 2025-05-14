@@ -18,8 +18,7 @@ public class InfectionService {
 
     public InfectionResponseDTO addInfection(InfectionRequestDTO infectionRequestDTO) {
         InfectionRecord infection = new InfectionRecord();
-        infection.setLat(infectionRequestDTO.getLat());
-        infection.setLng(infectionRequestDTO.getLng());
+        infection.setCity(infectionRequestDTO.getCity());
         infection.setRadius(infectionRequestDTO.getRadius());
         infection.setDisease(infectionRequestDTO.getDisease());
         infection.setCases(infectionRequestDTO.getCases());
@@ -38,6 +37,7 @@ public class InfectionService {
     private InfectionResponseDTO convertToResponseDTO(InfectionRecord infection) {
         InfectionResponseDTO responseDTO = new InfectionResponseDTO();
         responseDTO.setId(infection.getId());
+        responseDTO.setCity(infection.getCity().name());
         responseDTO.setLat(infection.getLat());
         responseDTO.setLng(infection.getLng());
         responseDTO.setRadius(infection.getRadius());
