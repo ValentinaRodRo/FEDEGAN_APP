@@ -1,5 +1,8 @@
 package com.backend.model;
 
+import lombok.Getter;
+
+@Getter
 public enum ColombianCity {
     BOGOTA(4.7110, -74.0721),
     MEDELLIN(6.2442, -75.5812),
@@ -21,7 +24,18 @@ public enum ColombianCity {
     SINCELEJO(9.3039, -75.3958),
     RIOHACHA(11.5449, -72.9072),
     LETICIA(-4.2150, -69.9406),
-    FLORENCIA(1.6178, -75.6054);
+    FLORENCIA(1.6178, -75.6054),
+    SAN_ANDRES(12.5847, -81.7006),
+    ARMENIA(4.5333, -75.6833),
+    TUNJA(5.5369, -73.3677),
+    QUIBDO(5.6925, -76.6628),
+    YOPAL(5.5558, -72.3931),
+    SANTA_MARTA_INT(11.1275, -74.2151),
+    MIAMI(25.7617, -80.1918),
+    HOUSTON(29.7604, -95.3698),
+    HAMBURG(53.5511, 9.9937),
+    MADRID(40.4168, -3.7038),
+    BUENOS_AIRES(-34.6037, -58.3816);
 
     private final double latitude;
     private final double longitude;
@@ -31,11 +45,4 @@ public enum ColombianCity {
         this.longitude = longitude;
     }
 
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
 }
