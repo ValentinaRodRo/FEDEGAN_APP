@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bovine Data Entry</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .section {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"], select, input[type="text"] {
+            width: calc(100% - 12px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #response-message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 3px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+<h1>Enter Bovine Data</h1>
+<div class="container">
+    <div class="section">
+        <h2>Import/Export</h2>
+        <form id="import-form">
+            <label for="import-amount">Number of Bovines:</label>
+            <input type="number" id="import-amount" name="amount" required>
+
+            <label for="import-city-exit">City of Exit:</label>
+            <select id="import-city-exit" name="cityExit" required>
+                <option value="">Select City</option>
+            </select>
+
+            <label for="import-city-entry">City of Entry:</label>
+            <select id="import-city-entry" name="cityEntry" required>
+                <option value="">Select City</option>
+            </select>
+
+            <button type="submit">Submit Import/Export</button>
+        </form>
+    </div>
+
+    <div class="section">
+        <h2>Outbreak (Infection)</h2>
+        <form id="outbreak-form">
+            <label for="outbreak-city">City of Outbreak:</label>
+            <select id="outbreak-city" name="city" required>
+                <option value="">Select City</option>
+            </select>
+
+            <label for="outbreak-radius">Outbreak Radius (meters):</label>
+            <input type="number" id="outbreak-radius" name="radius">
+
+            <label for="outbreak-disease">Disease:</label>
+            <input type="text" id="outbreak-disease" name="disease" required>
+
+            <label for="outbreak-cases">Number of Cases:</label>
+            <input type="number" id="outbreak-cases" name="cases" required>
+
+            <label for="outbreak-region">Region:</label>
+            <input type="text" id="outbreak-region" name="region">
+
+            <button type="submit">Submit Outbreak</button>
+        </form>
+    </div>
+</div>
+
+<div id="response-message" style="display:none;"></div>
+
+<script>
+    const importForm = document.getElementById('import-form');
+    const outbreakForm = document.getElementById('outbreak-form');
+    const importCityExit = document.getElementById('import-city-exit');
+    const importCityEntry = document.getElementById('import-city-entry');
+    const outbreakCity = document.getElementById('outbreak-city');
+    const responseMessageDiv = document.getElementById('response-message');
+
+    const colombianCities = [
+        "BOGOTA", "MEDELLIN", "CALI", "BARRANQUILLA", "CARTAGENA", "CUCUTA", "BUCARAMANGA",
+        "MANIZALES", "PEREIRA", "VALLEDUPAR", "SANTA_MARTA", "NEIVA", "IBAGUE", "VILLAVICENCIO",
+        "POPAYAN", "PASTO", "MONTERIA", "SINCELEJO", "RIOHACHA", "LETICIA", "FLORENCIA",
+        "SAN_ANDRES", "ARMENIA", "TUNJA", "QUIBDO", "YOPAL", "SANTA_MARTA_INT"
+        // Add international cities if you want them in the dropdown
+        // , "MIAMI", "HOUSTON", "HAMBURG", "MADRID", "BUENOS_AIRES"
+    ];
+
+    function populateDropdown(selectElement, cities) {
+        cities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city;
+            option.textContent = city.replace(/_/g, ' '); // Replace underscores for display
+            selectElement.appendChild(option);
+        });
+    }
+
+    populateDropdown(importCityExit, colombianCities);
+    populateDropdown(importCityEntry, colombianCities);
+    populateDropdown(outbreakCity, colombianCities);
+
+    importForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(importForm);
+        const data = Object.fromEntries(formData);
+
+        try {
+            const response = await fetch('/api/imports', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                displayMessage('Import/Export data submitted successfully!', 'success');
+                importForm.reset();
+            } else {
+                displayMessage(`Error submitting data: ${response.status} - ${result.message || 'Unknown error'}`, 'error');
+            }
+        } catch (error) {
+            displayMessage(`Network error: ${error.message}`, 'error');
+        }
+    });
+
+    outbreakForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(outbreakForm);
+        const data = Object.fromEntries(formData);
+
+        try {
+            const response = await fetch('/api/infections', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                displayMessage('Outbreak data submitted successfully!', 'success');
+                outbreakForm.reset();
+            } else {
+                displayMessage(`Error submitting data: ${response.status} - ${result.message || 'Unknown error'}`, 'error');
+            }
+        } catch (error) {
+            displayMessage(`Network error: ${error.message}`, 'error');
+        }
+    });
+
+    function displayMessage(message, type) {
+        responseMessageDiv.textContent = message;
+        responseMessageDiv.className = type;
+        responseMessageDiv.style.display = 'block';
+        setTimeout(() => {
+            responseMessageDiv.style.display = 'none';
+        }, 5000); // Hide after 5 seconds
+    }
+</script>
+</body>
+</html>
