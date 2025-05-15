@@ -1,0 +1,19 @@
+# application-test.properties
+spring:
+  datasource:
+    url: jdbc:h2:mem:fedegan_db;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS public
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  profiles:
+    active: test
