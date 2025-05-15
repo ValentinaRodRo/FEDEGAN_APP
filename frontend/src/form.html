@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Import & Infection Reporting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-light: #EEF2FF;
+            --bg: #F9FAFB;
+            --card-bg: #FFFFFF;
+            --text: #111827;
+            --muted: #6B7280;
+            --success: #10B981;
+            --error: #EF4444;
+            --radius: 0.75rem;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        * { box-sizing: border-box; margin:0; padding:0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height:1.6; }
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        h1 { text-align: center; margin-bottom: 1rem; font-weight: 600; }
+        .tabs { display: flex; margin-bottom: 1.5rem; }
+        .tab { flex:1; padding: 0.75rem 1rem; text-align: center; cursor: pointer; background: var(--card-bg); border-bottom: 3px solid transparent; border-top-left-radius: var(--radius); border-top-right-radius: var(--radius); transition: background .3s; }
+        .tab.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); font-weight: 600; }
+        .card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 2rem; }
+        .form-group { margin-bottom: 1rem; }
+        label { display:block; font-size:0.9rem; margin-bottom:0.25rem; color: var(--muted); }
+        input, select { width:100%; padding:0.75rem 1rem; border:1px solid #D1D5DB; border-radius:var(--radius); font-size:1rem; transition: border-color .3s; }
+        input:focus, select:focus { border-color: var(--primary); outline: none; }
+        .btn { display:inline-block; background: var(--primary); color:#FFF; padding:0.75rem 1.5rem; border:none; border-radius:var(--radius); font-size:1rem; cursor: pointer; transition: background .3s; margin: 1rem}
+        .btn:hover { background: #4338CA; }
+        .message { margin-top:1rem; font-weight:500; }
+        .message.success { color: var(--success); }
+        .message.error { color: var(--error); }
+        .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:1rem; }
+    </style>
+</head>
+<body>
+<!-- Navigation Buttons -->
+<div class="nav-buttons" style="text-align: right; margin-bottom: 1rem;">
+    <!-- If you’re on the Dashboard page -->
+    <a href="form.html" class="btn" style="margin-right: 0.5rem;">
+        Manage Imports & Infections
+    </a>
+
+    <!-- If you’re on the Forms page -->
+    <a href="index.html" class="btn">
+        View Dashboard
+    </a>
+</div>
+
+<div class="container">
+    <h1>Import & Infection Data Management</h1>
+    <div class="tabs">
+        <div class="tab active" data-target="import-form">Imports</div>
+        <div class="tab" data-target="infection-form">Infections</div>
+    </div>
+
+    <div id="import-form" class="card form-card">
+        <form id="form-import">
+            <div class="grid">
+                <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" name="amount" required min="1" />
+                </div>
+                <div class="form-group">
+                    <label for="cityExit">City Exit</label>
+                    <select id="cityExit" name="cityExit" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="cityEntry">City Entry</label>
+                    <select id="cityEntry" name="cityEntry" required></select>
+                </div>
+            </div>
+            <button type="submit" class="btn">Submit Import</button>
+            <div id="import-message" class="message"></div>
+        </form>
+    </div>
+
+    <div id="infection-form" class="card form-card" style="display:none;">
+        <form id="form-infection">
+            <div class="grid">
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <select id="city" name="city" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="radius">Radius (km)</label>
+                    <input type="number" id="radius" name="radius" step="0.01" required />
+                </div>
+                <div class="form-group">
+                    <label for="disease">Disease</label>
+                    <input type="text" id="disease" name="disease" required />
+                </div>
+                <div class="form-group">
+                    <label for="cases">Cases</label>
+                    <input type="number" id="cases" name="cases" required min="0" />
+                </div>
+                <div class="form-group">
+                    <label for="region">Region</label>
+                    <input type="text" id="region" name="region" required />
+                </div>
+            </div>
+            <button type="submit" class="btn">Submit Infection</button>
+            <div id="infection-message" class="message"></div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const tabs = document.querySelectorAll('.tab');
+    const cards = document.querySelectorAll('.form-card');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            cards.forEach(c => c.style.display = 'none');
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.target).style.display = 'block';
+        });
+    });
+
+    // Colombian cities list
+    const cities = [
+        "BOGOTA","MEDELLIN","CALI","BARRANQUILLA","CARTAGENA","CUCUTA","BUCARAMANGA","MANIZALES","PEREIRA","VALLEDUPAR",
+        "SANTA_MARTA","NEIVA","IBAGUE","VILLAVICENCIO","POPAYAN","PASTO","MONTERIA","SINCELEJO","RIOHACHA","LETICIA",
+        "FLORENCIA","SAN_ANDRES","ARMENIA","TUNJA","QUIBDO","YOPAL","SANTA_MARTA_INT","MIAMI","HOUSTON","HAMBURG",
+        "MADRID","BUENOS_AIRES"
+    ];
+    function populateSelect(selector) {
+        const sel = document.getElementById(selector);
+        sel.innerHTML = '<option value="" disabled selected>Select city</option>' +
+            cities.map(ct => `<option value="${ct}">${ct.replace('_INT',' International')}</option>`).join('');
+    }
+    ['cityExit','cityEntry','city'].forEach(populateSelect);
+
+    // Helper to send POST
+    async function postData(url = '', data = {}) {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        return res.json();
+    }
+
+    // Import form submit
+    document.getElementById('form-import').addEventListener('submit', async e => {
+        e.preventDefault();
+        const messageEl = document.getElementById('import-message');
+        messageEl.textContent='';
+        try {
+            const payload = {
+                amount: parseInt(e.target.amount.value,10),
+                cityExit: e.target.cityExit.value,
+                cityEntry: e.target.cityEntry.value
+            };
+            await postData('http://localhost:8080/api/imports', payload);
+            messageEl.textContent = 'Import submitted successfully!';
+            messageEl.className = 'message success';
+            e.target.reset();
+        } catch (err) {
+            messageEl.textContent = 'Failed to submit import.';
+            messageEl.className = 'message error';
+        }
+    });
+
+    // Infection form submit
+    document.getElementById('form-infection').addEventListener('submit', async e => {
+        e.preventDefault();
+        const messageEl = document.getElementById('infection-message');
+        messageEl.textContent='';
+        try {
+            const payload = {
+                city: e.target.city.value,
+                radius: parseFloat(e.target.radius.value),
+                disease: e.target.disease.value,
+                cases: parseInt(e.target.cases.value,10),
+                region: e.target.region.value
+            };
+            await postData('http://localhost:8080/api/infections', payload);
+            messageEl.textContent = 'Infection data submitted!';
+            messageEl.className = 'message success';
+            e.target.reset();
+        } catch (err) {
+            messageEl.textContent = 'Failed to submit infection.';
+            messageEl.className = 'message error';
+        }
+    });
+</script>
+</body>
+</html>
