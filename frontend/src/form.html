@@ -102,7 +102,9 @@
                 </div>
                 <div class="form-group">
                     <label for="region">Region</label>
-                    <input type="text" id="region" name="region" required />
+                    <select id="region" name="region" required>
+                        <option value="" disabled selected>Select city first…</option>
+                    </select>
                 </div>
             </div>
             <button type="submit" class="btn">Submit Infection</button>
@@ -130,6 +132,43 @@
         "FLORENCIA","SAN_ANDRES","ARMENIA","TUNJA","QUIBDO","YOPAL","SANTA_MARTA_INT","MIAMI","HOUSTON","HAMBURG",
         "MADRID","BUENOS_AIRES"
     ];
+
+    // Full city → region lookup map
+    const cityRegionMap = {
+        BOGOTA:             'Cundinamarca',
+        MEDELLIN:           'Antioquia',
+        CALI:               'Valle del Cauca',
+        BARRANQUILLA:       'Atlántico',
+        CARTAGENA:          'Bolívar',
+        CUCUTA:             'Norte de Santander',
+        BUCARAMANGA:        'Santander',
+        MANIZALES:          'Caldas',
+        PEREIRA:            'Risaralda',
+        VALLEDUPAR:         'Cesar',
+        SANTA_MARTA:        'Magdalena',
+        NEIVA:              'Huila',
+        IBAGUE:             'Tolima',
+        VILLAVICENCIO:      'Meta',
+        POPAYAN:            'Cauca',
+        PASTO:              'Nariño',
+        MONTERIA:           'Córdoba',
+        SINCELEJO:          'Sucre',
+        RIOHACHA:           'La Guajira',
+        LETICIA:            'Amazonas',
+        FLORENCIA:          'Caquetá',
+        SAN_ANDRES:         'San Andrés y Providencia',
+        ARMENIA:            'Quindío',
+        TUNJA:              'Boyacá',
+        QUIBDO:             'Chocó',
+        YOPAL:              'Casanare',
+        SANTA_MARTA_INT:    'Magdalena',
+        MIAMI:              'Florida',
+        HOUSTON:            'Texas',
+        HAMBURG:            'Hamburg',
+        MADRID:             'Community of Madrid',
+        BUENOS_AIRES:       'Buenos Aires'
+    };
+    
     function populateSelect(selector) {
         const sel = document.getElementById(selector);
         sel.innerHTML = '<option value="" disabled selected>Select city</option>' +
@@ -188,6 +227,19 @@
         } catch (err) {
             messageEl.textContent = 'Failed to submit infection.';
             messageEl.className = 'message error';
+        }
+    });
+
+    // when the infection form’s city <select> changes:
+    document.getElementById('city').addEventListener('change', e => {
+        const regionSelect = document.getElementById('region');
+        const regionName   = cityRegionMap[e.target.value] || '';
+
+        if (!regionName) {
+            regionSelect.innerHTML = '<option value="" disabled selected>Unknown region</option>';
+        } else {
+            // inject exactly one option and select it
+            regionSelect.innerHTML = `<option value="${regionName}" selected>${regionName}</option>`;
         }
     });
 </script>
